@@ -1,16 +1,20 @@
 <script setup>
 import TestItem from '@/components/TestItem.vue'
-import { computed, ref, watch, nextTick } from 'vue'
+import { computed, ref, watch, nextTick, onMounted } from 'vue'
 import rowColorizer from '@/helpers/rowColorizer'
 import { useDataStore } from '@/store/dataStore'
+import { useTableStore } from '@/store/tableStore'
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiChevronDown, mdiChevronRight, mdiMinus } from '@mdi/js'
 
 const dataStore = useDataStore()
+const tableStore = useTableStore()
 
 const isOpen = ref(false)
+const isOpenOnMount = ref(false)
 
-const props = defineProps(['data', 'isAllOpen', 'isFirst'])
+const props = defineProps(['data', 'isFirst', 'isParentOpen', 'isParentOpenOnMount'])
+
 const children = computed(() => dataStore.data?.filter((item) => item.parent_id === props.data?.id))
 const icon = computed(() => {
   if (!children.value?.length) {
@@ -19,19 +23,22 @@ const icon = computed(() => {
   return isOpen.value ? mdiChevronDown : mdiChevronRight
 })
 
-watch(
-  () => props.isAllOpen,
-  () => {
-    isOpen.value = props.isAllOpen
-  },
-  {
-    immediate: true
+onMounted(() => {
+  if (typeof tableStore.state?.[props.data.id] === 'boolean') {
+    isOpen.value = tableStore.state[props.data.id]
+  } else {
+    tableStore.state[props.data.id] = false
   }
-)
+  if (props.isParentOpen && !props.isParentOpenOnMount && !isOpen.value) {
+    isOpen.value = true
+    isOpenOnMount.value = true
+  }
+})
 
 watch(
   () => isOpen.value,
   () => {
+    tableStore.state[props.data.id] = isOpen.value
     nextTick(() => rowColorizer())
   }
 )
@@ -49,7 +56,8 @@ watch(
         v-for="item in children"
         :key="item.id"
         :data="item"
-        :isAllOpen="props.isAllOpen"
+        :isParentOpen="isOpen"
+        :isParentOpenOnMount="isOpenOnMount"
         style="padding-left: 1rem"
       />
     </template>
