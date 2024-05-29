@@ -76,7 +76,7 @@ watch(
   font-weight: bold;
 }
 
-.booty {
+.highlight {
   background-color: lightblue;
 }
 </style>
