@@ -1,9 +1,11 @@
 <script setup>
-import TestItem from '@/components/TestItem.vue'
-import { computed } from 'vue'
-import { useDataStore } from '@/store/dataStore'
+// npm
 import SvgIcon from '@jamescoyle/vue-icon'
 import { mdiAlert, mdiTimerSandEmpty } from '@mdi/js'
+import { computed } from 'vue'
+// local
+import TestItem from '@/components/TestItem.vue'
+import { useDataStore } from '@/store/dataStore'
 
 const dataStore = useDataStore()
 

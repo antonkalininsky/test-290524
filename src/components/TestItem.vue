@@ -1,11 +1,13 @@
 <script setup>
-import TestItem from '@/components/TestItem.vue'
+// npm
+import SvgIcon from '@jamescoyle/vue-icon'
+import { mdiChevronDown, mdiChevronRight, mdiMinus } from '@mdi/js'
 import { computed, ref, watch, nextTick, onMounted } from 'vue'
+// local
+import TestItem from '@/components/TestItem.vue'
 import rowColorizer from '@/helpers/rowColorizer'
 import { useDataStore } from '@/store/dataStore'
 import { useTableStore } from '@/store/tableStore'
-import SvgIcon from '@jamescoyle/vue-icon'
-import { mdiChevronDown, mdiChevronRight, mdiMinus } from '@mdi/js'
 
 const dataStore = useDataStore()
 const tableStore = useTableStore()
